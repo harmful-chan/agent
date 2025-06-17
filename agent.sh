@@ -189,6 +189,7 @@ function update_aws_record() {
     local domain=$1
     local ip=$2
     local action=$3  # CREATE或UPSERT
+    local hosted_zone_id=$4
     
     # 创建临时JSON文件
     local temp_file=$(mktemp)
@@ -214,7 +215,6 @@ function update_aws_record() {
 EOF
     
     # 执行AWS CLI命令
-    local hosted_zone_id=$(aws route53 list-hosted-zones | jq -r '.HostedZones[0].Id')
     aws route53 change-resource-record-sets \
         --hosted-zone-id $hosted_zone_id \
         --change-batch file://$temp_file
@@ -247,7 +247,8 @@ function monitor_servers() {
     
     # 如果是上线状态，更新DNS记录
     if [ "$status" = "在线" ]; then
-        update_aws_record "$domain" "$ip" "UPSERT"
+        local hosted_zone_id=$(aws route53 list-hosted-zones | jq -r '.HostedZones[0].Id')
+        update_aws_record "$domain" "$ip" "UPSERT" "$hosted_zone_id"
     fi
 }
 
