@@ -4,19 +4,39 @@
 
 # 检查并安装必要工具
 function install_dependencies() {
+    # 检查是否首次运行
+    if [ -f "/tmp/agent_first_run" ]; then
+        echo "非首次运行，跳过依赖安装"
+        return
+    fi
+    
+    # 检查工具是否已安装
+    if command -v curl &> /dev/null && \
+       command -v jq &> /dev/null && \
+       command -v unzip &> /dev/null && \
+       command -v aws &> /dev/null && \
+       (command -v lsb_release &> /dev/null || command -v redhat-lsb-core &> /dev/null); then
+        echo "所需工具已安装，跳过安装步骤"
+        return
+    fi
+
     if command -v apt-get &> /dev/null; then
         # Ubuntu/Debian
         sudo apt-get update
         sudo apt-get install -y curl jq unzip lsb-release
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+        if ! command -v aws &> /dev/null; then
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+        fi
     elif command -v yum &> /dev/null; then
         # CentOS/RHEL
         sudo yum install -y curl jq unzip redhat-lsb-core
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+        if ! command -v aws &> /dev/null; then
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+        fi
     else
         echo "错误: 不支持的Linux发行版"
         exit 1
@@ -25,6 +45,9 @@ function install_dependencies() {
 
 # 安装依赖
 install_dependencies
+
+# 标记首次运行已完成
+touch /tmp/agent_first_run
 
 # 加载环境变量
 if [ -f "./.env" ]; then
