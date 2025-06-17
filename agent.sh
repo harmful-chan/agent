@@ -63,8 +63,9 @@ for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then
         echo "错误: 缺少必需的环境变量 $var"
         exit 1
+    else
+        echo "${var}=${!var}"
     fi
-
 done
 
 # 获取飞书tenant_access_token
