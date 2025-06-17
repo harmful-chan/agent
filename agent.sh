@@ -156,8 +156,8 @@ EOF
         "状态": "$status",
         "运行时间": "$(uptime -p | sed 's/up //')",
         "Load": "$(uptime | awk -F'load average: ' '{print $2}')",
-        "上传": "$(vnstat --oneline | awk -F';' '{print $6}')",
-        "下载": "$(vnstat --oneline | awk -F';' '{print $5}')",
+        "上传": "$(cat /proc/net/dev | grep -v lo | awk '{sum+=$2} END {print sum/1024/1024 " MB"}')",
+        "下载": "$(cat /proc/net/dev | grep -v lo | awk '{sum+=$10} END {print sum/1024/1024 " MB"}')",
         "上报时间": "$(date '+%Y-%m-%d %H:%M:%S')"
     }
 }
