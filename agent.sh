@@ -204,4 +204,4 @@ function monitor_servers() {
     fi
 }
 
-done
+monitor_servers
