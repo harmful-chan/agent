@@ -2,6 +2,24 @@
 # 服务器监控脚本
 # 作者: hans <admin@floribird.com>
 
+# 检查并安装必要工具
+function install_dependencies() {
+    if command -v apt-get &> /dev/null; then
+        # Ubuntu/Debian
+        sudo apt-get update
+        sudo apt-get install -y curl jq awscli lsb-release
+    elif command -v yum &> /dev/null; then
+        # CentOS/RHEL
+        sudo yum install -y curl jq awscli redhat-lsb-core
+    else
+        echo "错误: 不支持的Linux发行版"
+        exit 1
+    fi
+}
+
+# 安装依赖
+install_dependencies
+
 # 加载环境变量
 if [ -f "./.env" ]; then
     source ./.env
@@ -84,8 +102,8 @@ EOF
         "系统": "$(lsb_release -d | cut -f2)",
         "CPU": "$(lscpu | grep 'Model name' | cut -d: -f2 | sed 's/^[ \t]*//')",
         "Load": "$(uptime | awk -F'load average: ' '{print $2}')",
-        "上传": "$(vnstat --oneline | awk -F';' '{print $6}')",
-        "下载": "$(vnstat --oneline | awk -F';' '{print $5}')",
+        "上传": "$(cat /proc/net/dev | grep -v lo | awk '{sum+=$2} END {print sum/1024/1024 " MB"}')",
+        "下载": "$(cat /proc/net/dev | grep -v lo | awk '{sum+=$10} END {print sum/1024/1024 " MB"}')",
         "启动时间": "$(date -d "$(uptime -s)" '+%Y-%m-%d %H:%M:%S')",
         "上报时间": "$(date '+%Y-%m-%d %H:%M:%S')"
     }
