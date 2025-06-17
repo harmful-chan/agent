@@ -7,10 +7,16 @@ function install_dependencies() {
     if command -v apt-get &> /dev/null; then
         # Ubuntu/Debian
         sudo apt-get update
-        sudo apt-get install -y curl jq awscli lsb-release
+        sudo apt-get install -y curl jq unzip lsb-release
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
     elif command -v yum &> /dev/null; then
         # CentOS/RHEL
-        sudo yum install -y curl jq awscli redhat-lsb-core
+        sudo yum install -y curl jq unzip redhat-lsb-core
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
     else
         echo "错误: 不支持的Linux发行版"
         exit 1

@@ -1,4 +1,9 @@
 ### AWS Route53 API
+```shell aws cli 安装步骤
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+```
 ```shell 列出所有域名信息
 aws route53  list-hosted-zones
 // 响应JSON
