@@ -59,7 +59,7 @@ function update_feishu_table() {
 EOF
     
     local response=$(curl -s -X POST \
-        "https://open.feishu.cn/open-apis/bitable/v1/apps/$FEISHU_APP_ID/tables/$FEISHU_TABLE_ID/records/search" \
+        "https://open.feishu.cn/open-apis/bitable/v1/apps/Y51VbNUf3askQ2sDdm9chN8JnAc/tables/tblWxQzjloN1vU06/records/search" \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $token" \
         -d "@$temp_file")
@@ -93,7 +93,7 @@ EOF
 EOF
         
         curl -s -X POST \
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/$FEISHU_APP_ID/tables/$FEISHU_TABLE_ID/records" \
+            "https://open.feishu.cn/open-apis/bitable/v1/apps/Y51VbNUf3askQ2sDdm9chN8JnAc/tables/tblWxQzjloN1vU06/records" \
             -H "Authorization: Bearer $token" \
             -H "Content-Type: application/json" \
             -d "@$temp_file"
@@ -116,7 +116,7 @@ EOF
 EOF
         
         curl -s -X PUT \
-            "https://open.feishu.cn/open-apis/bitable/v1/apps/$FEISHU_APP_ID/tables/$FEISHU_TABLE_ID/records/$record_id" \
+            "https://open.feishu.cn/open-apis/bitable/v1/apps/Y51VbNUf3askQ2sDdm9chN8JnAc/tables/tblWxQzjloN1vU06/records/$record_id" \
             -H "Authorization: Bearer $token" \
             -H "Content-Type: application/json" \
             -d "@$temp_file"
