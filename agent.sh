@@ -25,17 +25,25 @@ function install_dependencies() {
         sudo apt-get update
         sudo apt-get install -y curl jq unzip lsb-release
         if ! command -v aws &> /dev/null; then
+            local temp_dir=$(mktemp -d)
+            cd "$temp_dir"
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+            cd -
+            rm -rf "$temp_dir"
         fi
     elif command -v yum &> /dev/null; then
         # CentOS/RHEL
         sudo yum install -y curl jq unzip redhat-lsb-core
         if ! command -v aws &> /dev/null; then
+            local temp_dir=$(mktemp -d)
+            cd "$temp_dir"
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+            cd -
+            rm -rf "$temp_dir"
         fi
     else
         echo "错误: 不支持的Linux发行版"
@@ -58,7 +66,7 @@ else
 fi
 
 # 检查必需的环境变量
-required_vars=("FEISHU_APP_ID" "FEISHU_APP_SECRET"  "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
+required_vars=("FEISHU_APP_ID" "FEISHU_APP_SECRET"  "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY" "AWS_DEFAULT_REGION")
 for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then
         echo "错误: 缺少必需的环境变量 $var"
@@ -248,7 +256,7 @@ function monitor_servers() {
     
     # 如果是上线状态，更新DNS记录
     if [ "$status" = "在线" ]; then
-        local hosted_zone_id=$(aws route53 list-hosted-zones | jq -r '.HostedZones[0].Id')
+        local hosted_zone_id=$(source .env && aws route53 list-hosted-zones | jq -r '.HostedZones[0].Id')
         update_aws_record "$domain" "$ip" "UPSERT" "$hosted_zone_id"
     fi
 }
