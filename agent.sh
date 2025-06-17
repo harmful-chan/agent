@@ -11,7 +11,7 @@ else
 fi
 
 # 检查必需的环境变量
-required_vars=("FEISHU_APP_ID" "FEISHU_APP_SECRET" "FEISHU_TABLE_ID" "WECHAT_WEBHOOK_KEY" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY" "AWS_HOSTED_ZONE_ID")
+required_vars=("FEISHU_APP_ID" "FEISHU_APP_SECRET"  "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
 for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then
         echo "错误: 缺少必需的环境变量 $var"
@@ -132,7 +132,7 @@ function send_wechat_notification() {
     
     local content="服务器状态变更通知\n> 域名: <font color=\"comment\">$domain</font>\n> 状态: <font color=\"warning\">$status</font>"
     
-    curl -s -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=$WECHAT_WEBHOOK_KEY" \
+    curl -s -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=819d9d31-849a-43ca-8d7a-8061fe67d72d" \
         -H 'Content-Type: application/json' \
         -d "{\"msgtype\":\"markdown\",\"markdown\":{\"content\":\"$content\"}}"
 }
@@ -167,8 +167,9 @@ function update_aws_record() {
 EOF
     
     # 执行AWS CLI命令
+    local hosted_zone_id=$(aws route53 list-hosted-zones | jq -r '.HostedZones[0].Id')
     aws route53 change-resource-record-sets \
-        --hosted-zone-id $AWS_HOSTED_ZONE_ID \
+        --hosted-zone-id $hosted_zone_id \
         --change-batch file://$temp_file
     
     # 清理临时文件
@@ -202,10 +203,5 @@ function monitor_servers() {
         update_aws_record "$domain" "$ip" "UPSERT"
     fi
 }
-
-# 主循环
-while true; do
-    monitor_servers
-    sleep 60  # 每1分钟执行一次
 
 done

@@ -133,6 +133,7 @@ aws route53 change-resource-record-sets --hosted-zone-id /hostedzone/Z0780784V5E
 
 ### 企业微信推送信息API
 ```shell
+// 819d9d31-849a-43ca-8d7a-8061fe67d72d 是固定的;
 POST https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=819d9d31-849a-43ca-8d7a-8061fe67d72d
 Content-Type: application/json
 {
