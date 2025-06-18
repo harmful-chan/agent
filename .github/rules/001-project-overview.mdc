@@ -1,0 +1,16 @@
+# 项目概览
+
+## 项目名称
+Agent
+
+## 项目描述
+维护服务器状态，上传服务器数据
+
+## 技术栈
+.NET 8.0, C#, ASP.NET Core, Entity Framework Core
+
+## 项目结构
+- `src/` - 源代码目录
+- `public/` - 静态资源目录
+- `docs/` - 文档目录
+- `tests/` - 测试文件目录

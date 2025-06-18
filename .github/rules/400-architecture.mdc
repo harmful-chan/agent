@@ -1,0 +1,22 @@
+# 项目架构
+
+## 架构概览
+我们的项目采用三层架构:
+1. 表现层(UI) - React组件
+2. 业务逻辑层 - Services和Hooks
+3. 数据访问层 - API调用和数据处理
+
+## 目录结构说明
+- `src/components/` - 所有UI组件，按功能分子目录
+- `src/hooks/` - 自定义React Hooks，封装复用逻辑
+- `src/services/` - 业务逻辑服务，包含API调用
+- `src/utils/` - 工具函数，纯函数，无副作用
+- `src/constants/` - 常量定义
+- `src/types/` - TypeScript类型定义
+
+## 数据流向
+1. 用户交互触发组件内事件处理函数
+2. 事件处理函数调用hooks或services
+3. Services进行API调用并处理响应
+4. 数据通过hooks或props返回给组件
+5. 组件根据新数据重新渲染UI

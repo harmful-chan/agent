@@ -1,0 +1,20 @@
+# 项目词汇表
+
+## 业务术语
+- **租户(Tenant)**: 指使用我们SaaS平台的企业客户
+- **工作区(Workspace)**: 租户内的独立工作环境，可设置不同的权限
+- **通道(Channel)**: 特定主题的消息分组，类似Slack的频道概念
+- **仪表板(Dashboard)**: 数据可视化界面，展示关键指标
+
+## 技术术语
+- **SSR**: 服务器端渲染，我们使用Next.js实现
+- **CSR**: 客户端渲染，用于非SEO关键页面
+- **ISR**: 增量静态再生成，用于半静态内容
+- **ORM**: 对象关系映射，我们使用Prisma
+- **JWT**: JSON Web Token，用于API认证
+
+## 自定义缩写
+- **UA**: User Analytics - 用户分析模块
+- **PM**: Permission Management - 权限管理系统
+- **DM**: Data Mining - 数据挖掘服务
+- **RT**: Real-time - 实时处理相关功能

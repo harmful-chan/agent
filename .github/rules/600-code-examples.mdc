@@ -1,0 +1,17 @@
+# 代码示例库
+
+## API请求示例
+```typescript
+// 标准API请求模式
+import { apiClient } from '@/utils/apiClient';
+import { handleApiError } from '@/utils/errorHandler';
+
+export async function fetchUserData(userId: string) {
+  try {
+    const response = await apiClient.get(`/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch user data');
+    return null;
+  }
+}
