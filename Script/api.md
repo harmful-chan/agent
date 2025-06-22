@@ -1,3 +1,10 @@
+### Cli53 命令行工具
+```shell 列出所有域名信息
+
+```
+
+
+
 ### AWS Route53 API
 ```shell aws cli 安装步骤
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -274,7 +281,7 @@ Authorization: Bearer t-g1046hh7CMLE5GY2WPMXGUXCVTR6F6BTLQC35WRU
 ```shell 更新记录
 // Y51VbNUf3askQ2sDdm9chN8JnAc 是固定的;
 // tblWxQzjloN1vU06 是固定的;
-POST https://open.feishu.cn/open-apis/bitable/v1/apps/Y51VbNUf3askQ2sDdm9chN8JnAc/tables/tblWxQzjloN1vU06/records/recOIGC4Uv
+PUT https://open.feishu.cn/open-apis/bitable/v1/apps/Y51VbNUf3askQ2sDdm9chN8JnAc/tables/tblWxQzjloN1vU06/records/recOIGC4Uv
 Content-Type: application/json
 Authorization: Bearer t-g1046hh7CMLE5GY2WPMXGUXCVTR6F6BTLQC35WRU
 {
