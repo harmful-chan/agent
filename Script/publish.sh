@@ -15,7 +15,7 @@ ssh hans@192.168.2.248 "cd agent && git pull && dotnet publish -r linux-x64 -c R
 echo "[2/4] 编译 win-x64"
 dotnet publish -r win-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${VERSION}-win-x64  
 echo "[3/4] 拷贝执行文件"
-scp -r hans@192.168.2.248:/home/hans/agent/Agent.Cli/bin/Release/net8.0/linux-x64/publish Agent.Cli/bin/Release/net8.0/linux-x64
+scp -r hans@192.168.2.248:/home/hans/agent/Agent.Cli/bin/Release/net8.0/linux-x64/publish Agent.Cli\bin\elease\net8.0\linux-x64
 echo "[4/4] 发布 tag"
 git tag $VERSION
 git push origin $VERSION
