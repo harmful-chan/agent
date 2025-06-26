@@ -108,8 +108,7 @@ namespace Agent.ConsoleApp.Client
                 string error = process.StandardError.ReadToEnd();
 
                 process.WaitForExit();
-                Console.WriteLine($"标准输出:{output}");
-                Console.WriteLine($"标准错误:{error}");
+                Console.WriteLine($"标准输出:{output} 标准错误:{error}");
 
                 return !string.IsNullOrWhiteSpace(output) ? output : error;
 

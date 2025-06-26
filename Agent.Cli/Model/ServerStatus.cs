@@ -44,9 +44,6 @@ namespace Agent.ConsoleApp.Model
             Console.WriteLine(str);
             IPAddress = json?["ip"]?.ToString() ?? "unknown";
             Region = $"{json?["country"]}/{json?["region"]}/{json?["city"]}";
-
-
-
             BootTime = DateTime.Now.AddMilliseconds(-Environment.TickCount).ToString("yyyy-MM-dd HH:mm:ss");
             Domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "unknown";
             Status = !string.IsNullOrWhiteSpace(IPAddress) ? "在线" : "unknown";

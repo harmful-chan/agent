@@ -24,6 +24,7 @@ namespace Agent.Cli
         static async Task Main(string[] args)
         {
 
+
             #region 日志
 
             using ILoggerFactory factory = LoggerFactory.Create(
@@ -63,26 +64,46 @@ namespace Agent.Cli
             }
             #endregion
 
+            while (true)
+            {
+                try
+                {
+                    // 获取服务信息
+                    var status = new ServerStatus();
+                    string? ipinfotoken = Environment.GetEnvironmentVariable("IPINFO_TOKEN") ?? "";
+                    await status.GetLocalInfo(ipinfotoken);
+                    Console.WriteLine(status.ToJson());
 
-            // 获取服务信息
-            var status = new ServerStatus();
-            string? ipinfotoken = Environment.GetEnvironmentVariable("IPINFO_TOKEN") ?? "";
-            await status.GetLocalInfo(ipinfotoken);
-            Console.WriteLine(status.ToJson());
+                    // 上传飞书
+                    var feishuclient = new FeishuClient();
+                    string id = Environment.GetEnvironmentVariable("FEISHU_APP_ID") ?? "";
+                    string key = Environment.GetEnvironmentVariable("FEISHU_APP_SECRET") ?? "";
+                    string token = await feishuclient.GetFeishuTokenAsync(id, key);
+                    await feishuclient.UploadFeishuServerStatus(status, token);
 
-            // 上传飞书
-            var feishuclient = new FeishuClient();
-            string id = Environment.GetEnvironmentVariable("FEISHU_APP_ID") ?? "";
-            string key = Environment.GetEnvironmentVariable("FEISHU_APP_SECRET") ?? "" ;
-            string token = await feishuclient.GetFeishuTokenAsync(id, key);
-            await feishuclient.UploadFeishuServerStatus(status, token);
+                    // 更新域名
+                    var cli53 = new Cli53Client();
+                    string domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "";
+                    string address = status.IPAddress ?? "";
+                    string ret = await cli53.UpsetIpByDomainAsync(domain, address);
+                    Console.WriteLine(ret);
+                }
+                catch (Exception)
+                {
 
-            // 更新域名
-            var cli53 = new Cli53Client();
-            string domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "";
-            string address = status.IPAddress ?? "";
-            string ret = await cli53.UpsetIpByDomainAsync(domain, address);
-            Console.WriteLine(ret);
+                    throw;
+                }
+                finally
+                {
+                    await Task.Delay(30000);
+                }
+
+
+
+            }
+
+
+
         }
 
     }

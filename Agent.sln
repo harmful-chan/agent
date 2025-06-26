@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "script", "script", "{02EA68
 		script\agent.sh = script\agent.sh
 		script\api.md = script\api.md
 		script\apt.txt = script\apt.txt
+		script\publish.sh = script\publish.sh
 		script\requirements.md = script\requirements.md
 	EndProjectSection
 EndProject

@@ -21,7 +21,7 @@ namespace Agent.ConsoleApp.Client
             var client = new RestClient("https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal");
             var req = new RestRequest() { Method = Method.Post };
             req.AddHeader("Content-Type", "application/json");
-            var body = "{\"app_id\":\"cli_a7b7327bb5fd500b\",\"app_secret\":\"DEsMubDWYd7TaQisWD2AFfzwNuxJfRee\"}";
+            var body = "{\"app_id\":\""+appId+"\",\"app_secret\":\""+appSecret+"\"}";
             req.AddParameter("application/json", body, ParameterType.RequestBody);
             var rsp = await client.ExecuteAsync(req);
             var json = rsp.Content != null ? JsonNode.Parse(rsp.Content) : "{}";
