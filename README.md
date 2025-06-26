@@ -18,7 +18,7 @@ ssh hans@192.168.2.248 "cd agent && dotnet publish -r linux-x64 -c Release --sel
 // windows 使用git bash 运行
 dotnet publish -r win-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-v1.0.0-alpha.1-win-x64  
 // 复制 linux 生成的文件
-scp -r hans@192.168.2.248:/home/hans/agent/Agent.Cli/bin/Release/net8.0/linux-x64/publish Agent.Cli/bin/Release/net8.0/linux-x64
+scp -r hans@192.168.2.248:/home/hans/agent/Agent.Cli/bin/Release/net8.0/linux-x64/publish Agent.Cli\bin\Release\net8.0\linux-x64
 ```
 
 ## 发布
