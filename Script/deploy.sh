@@ -16,7 +16,7 @@ VERSION=$1
 
 echo "[INFO] 下载 agent-cli-v1.0.0-alpha.1-linux-x64 "
 sudo mkdir -p /opt/agent-cli
-sudo wget  https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/agent-cli-v1.0.0-alpha.1-linux-x64 -o /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64
+sudo wget  https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/agent-cli-v1.0.0-alpha.1-linux-x64 -o /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64
 sudo ln -s /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64 /opt/agent-cli/agent-cli
 echo "[INFO] 创建 /etc/systemd/system/agent-cli.service"
 # 写入服务进程
