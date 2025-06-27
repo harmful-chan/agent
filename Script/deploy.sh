@@ -27,8 +27,7 @@ fi
 
 echo "[INFO] 创建 /etc/systemd/system/agent-cli.service"
 # 写入服务进程
-sudo touch /etc/systemd/system/agent-cli.service
-sudo echo >/etc/systemd/system/agent-cli.service <<EOF
+cat >agent-cli.service <<EOF
 [Unit]
 Description=Agent Cli Service for .NET 8 Console Application
 After=network.target
@@ -57,6 +56,8 @@ Environment=DOTNET_ROOT=/usr/share/dotnet
 WantedBy=multi-user.target
 EOF
 
+sudo mv agent-cli.service /etc/systemd/system/agent-cli.service
+sudo chown root:root /etc/systemd/system/agent-cli.service
 sudo systemctl daemon-reload
 
 
