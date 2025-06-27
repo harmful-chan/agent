@@ -7,27 +7,9 @@
 - 域名: 自动更下或添加指定域名的A记录
 
 
-## 编译
-```bash
-
-// linux 使用 ubuntu 22.04 运行
-// 安装 .NET 8 SDK https://learn.microsoft.com/zh-cn/dotnet/core/install/linux-ubuntu-install?tabs=dotnet8&pivots=os-linux-ubuntu-2204
-// 安装 AOT 编译器 https://learn.microsoft.com/zh-cn/dotnet/core/deploying/native-aot/?tabs=linux-ubuntu%2Cnet8
-ssh hans@192.168.2.248 "cd agent && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-v1.0.0-alpha.1-linux-x64"
-
-// windows 使用git bash 运行
-dotnet publish -r win-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-v1.0.0-alpha.1-win-x64  
-// 复制 linux 生成的文件
-scp -r hans@192.168.2.248:/home/hans/agent/Agent.Cli/bin/Release/net8.0/linux-x64/publish Agent.Cli\bin\Release\net8.0\linux-x64
-```
-
 ## 发布
+需要发布的版本先打tag，`publish.sh` 脚本根据tag获取代码编译
 ```bash
-// 可执行文件 发布到 tag 下
-// Agent.Cli/bin/Release/net8.0/linux-x64/agent-cli-v1.0.0-alpha.1-linux-x64
-// Agent.Cli/bin/Release/net8.0/win-x64/agent-cli-v1.0.0-alpha.1-win-x64.exe
-
-
 # git ls-remote --tags
 # git tag -d v1.0.0-alpha.1
 # git push origin :refs/tags/v1.0.0-alpha.1
@@ -35,6 +17,22 @@ scp -r hans@192.168.2.248:/home/hans/agent/Agent.Cli/bin/Release/net8.0/linux-x6
 git tag v1.0.0-alpha.1
 git push origin v1.0.0-alpha.1
 ```
+
+## 编译
+> - linux 使用 ubuntu 22.04 运行
+> - 安装 .NET 8 SDK https://learn.microsoft.com/zh-cn/dotnet/core/install/linux-ubuntu-install?tabs=dotnet8&pivots=os-linux-ubuntu-2204
+>-  安装 AOT 编译器 https://learn.microsoft.com/zh-cn/dotnet/core/deploying/native-aot/?tabs=linux-ubuntu%2Cnet8
+
+在 windows git bash 中运行以下命令编译，在`publish` 文件夹中自动生成发布文件</br>
+其中`hans:123456@192.168.2.248` 指定linux主机的用户名、密码、IP地址和SSH端口，
+```bash
+# 进入 bash 
+# & "C:\Program Files\Git\bin\bash.exe" 
+cd Script
+bash publish.sh v1.0.0-alpha.1 hans:123456@192.168.2.248
+```
+
+
 
 ## 用法
 新部署服务器直接运行 `./agent` 即可

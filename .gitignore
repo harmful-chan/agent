@@ -1,5 +1,5 @@
 .env
-publish
+publish/
 
 
 # Build and Release Folders
