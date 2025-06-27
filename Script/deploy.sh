@@ -15,9 +15,9 @@ fi
 VERSION=$1
 
 
-mkdir -p /opt/agent-cli
-wget  https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/agent-cli-v1.0.0-alpha.1-linux-x64 -o /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64
-ln -s /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64 /opt/agent-cli/agent-cli
+sudo mkdir -p /opt/agent-cli
+sudo wget  https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/agent-cli-v1.0.0-alpha.1-linux-x64 -o /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64
+sudo ln -s /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64 /opt/agent-cli/agent-cli
 # 写入服务进程
 sudo cat >/etc/systemd/system/agent-cli.service <<EOF
 [Unit]
