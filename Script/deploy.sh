@@ -17,7 +17,7 @@ RELEASES=agent-cli-v1.0.0-alpha.1-linux-x64
 
 echo "[INFO] 下载 $RELEASES "
 sudo mkdir -p /opt/agent-cli
-wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/${$RELEASES}"
+wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/${RELEASES}"
 sudo mv $RELEASES /opt/agent-cli/
 sudo chmod a+x /opt/agent-cli/$RELEASES
 sudo chown root:root /opt/agent-cli/$RELEASES
