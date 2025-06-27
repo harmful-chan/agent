@@ -1,21 +1,44 @@
 #!/bin/bash
 
+# v1.0.0-alpha.1 hans:123456@192.168.2.248
 set -euo pipefail
 
 if [ $# -eq 0 ]; then
     echo "错误: 请提供版本名称作为参数，例如: v1.0.0-alpha.1"
     exit 1
 fi
-
 VERSION=$1
+REMOTE=$2
+userpass="${2%%@*}"
+hostport="${2##*@}"
+username="${userpass%%:*}"
+password="${userpass#*:}"
+
+# 检查主机部分是否包含端口
+if [[ "$hostport" == *:* ]]; then
+    hostname="${hostport%:*}"
+    port="${hostport##*:}"
+else
+    hostname="$hostport"
+    port=""
+fi
+
+mkdir -p publish
+git clone https://github.com/harmful-chan/agent --single-branch $VERSION
+./sshpass.exe -p ${password} scp -r $VERSION ${username}@${hostport}:/home/hans/
+
+pushd $VERSION
+dotnet publish -r win-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${VERSION}-win-x64
+popd
+
+cp -r $VERSION/Agent.Cli/bin/Release/net8.0/win-x64/publish/* publish
+rm -rf $VERSION
+
+./sshpass.exe -p ${password}  ssh ${username}@${hostport} "pushd $VERSION && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${VERSION}-linux-x64 && popd"
+./sshpass.exe -p ${password} scp -r ${username}@${hostport}:/home/hans/$VERSION/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* publish
+./sshpass.exe -p ${password} ssh ${username}@${hostport} "rm -rf $VERSION"
+
+echo 编译完成
 
 
-echo "[1/4] 编译 linux-x64"
-ssh hans@192.168.2.248 "cd agent && git pull && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${VERSION}-linux-x64"
-echo "[2/4] 编译 win-x64"
-dotnet publish -r win-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${VERSION}-win-x64  
-echo "[3/4] 拷贝执行文件"
-scp -r hans@192.168.2.248:/home/hans/agent/Agent.Cli/bin/Release/net8.0/linux-x64/publish Agent.Cli\bin\elease\net8.0\linux-x64
-echo "[4/4] 发布 tag"
-git tag $VERSION
-git push origin $VERSION
+
