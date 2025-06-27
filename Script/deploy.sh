@@ -15,13 +15,16 @@ fi
 VERSION=$1
 RELEASES=agent-cli-v1.0.0-alpha.1-linux-x64
 
-echo "[INFO] 下载 $RELEASES "
-sudo mkdir -p /opt/agent-cli
-wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/${RELEASES}"
-sudo mv $RELEASES /opt/agent-cli/
-sudo chmod a+x /opt/agent-cli/$RELEASES
-sudo chown root:root /opt/agent-cli/$RELEASES
-sudo ln -s /opt/agent-cli/$RELEASES /opt/agent-cli/agent-cli
+if [ ! -f "/opt/agent-cli/$RELEASES" ]; then
+	echo "[INFO] 下载 $RELEASES "
+	sudo mkdir -p /opt/agent-cli
+	wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/${RELEASES}"
+	sudo mv $RELEASES /opt/agent-cli/
+	sudo chmod a+x /opt/agent-cli/$RELEASES
+	sudo chown root:root /opt/agent-cli/$RELEASES
+	sudo ln -s /opt/agent-cli/$RELEASES /opt/agent-cli/agent-cli
+fi
+
 echo "[INFO] 创建 /etc/systemd/system/agent-cli.service"
 # 写入服务进程
 sudo cat >/etc/systemd/system/agent-cli.service <<EOF
