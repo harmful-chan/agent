@@ -6,7 +6,7 @@ set -euo pipefail
 if [ -f "/etc/systemd/system/agent-cli.service" ]; then
 	echo "服务已存在"
 	exit 1
-if
+fi
 
 if [ $# -eq 0 ]; then
     echo "错误: 请提供版本名称作为参数，例如: v1.0.0-alpha.1"
@@ -49,6 +49,5 @@ WantedBy=multi-user.target
 EOF
 
 sudo systemctl daemon-reload
-# 尾行
 
 
