@@ -4,12 +4,12 @@
 set -euo pipefail
 
 if [ -f "/etc/systemd/system/agent-cli.service" ]; then
-	echo "·þÎñÒÑ´æÔÚ"
+	echo "æœåŠ¡å·²å­˜åœ¨"
 	exit 1
 if
 
 if [ $# -eq 0 ]; then
-    echo "´íÎó: ÇëÌá¹©°æ±¾Ãû³Æ×÷Îª²ÎÊý£¬ÀýÈç: v1.0.0-alpha.1"
+    echo "é”™è¯¯: è¯·æä¾›ç‰ˆæœ¬åç§°ä½œä¸ºå‚æ•°ï¼Œä¾‹å¦‚: v1.0.0-alpha.1"
     exit 1
 fi
 VERSION=$1
@@ -18,7 +18,7 @@ VERSION=$1
 mkdir -p /opt/agent-cli
 wget  https://github.com/harmful-chan/agent/releases/download/v1.0.0-alpha.1/agent-cli-v1.0.0-alpha.1-linux-x64 -o /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64
 ln -s /opt/agent-cli/agent-cli-v1.0.0-alpha.1-linux-x64 /opt/agent-cli/agent-cli
-# Ð´Èë·þÎñ½ø³Ì
+# å†™å…¥æœåŠ¡è¿›ç¨‹
 sudo cat >/etc/systemd/system/agent-cli.service <<EOF
 [Unit]
 Description=Agent Cli Service for .NET 8 Console Application
@@ -26,21 +26,21 @@ After=network.target
 Requires=network.target
 
 [Service]
-# Ó¦ÓÃ³ÌÐòµÄÓÃ»§ºÍ×é
+# åº”ç”¨ç¨‹åºçš„ç”¨æˆ·å’Œç»„
 User=root
 Group=root
 
-# Ó¦ÓÃ³ÌÐòµÄ¹¤×÷Ä¿Â¼ºÍÖ´ÐÐÂ·¾¶
+# åº”ç”¨ç¨‹åºçš„å·¥ä½œç›®å½•å’Œæ‰§è¡Œè·¯å¾„
 WorkingDirectory=/opt/agent-cli/
 ExecStart=/opt/agent-cli/agent-cli
 
-# ½ø³Ì¹ÜÀíÑ¡Ïî
+# è¿›ç¨‹ç®¡ç†é€‰é¡¹
 Restart=on-failure
 RestartSec=5s
 KillMode=process
 TimeoutStopSec=30
 
-# »·¾³±äÁ¿
+# çŽ¯å¢ƒå˜é‡
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_ROOT=/usr/share/dotnet
 
