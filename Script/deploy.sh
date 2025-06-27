@@ -27,7 +27,8 @@ fi
 
 echo "[INFO] 创建 /etc/systemd/system/agent-cli.service"
 # 写入服务进程
-sudo cat >/etc/systemd/system/agent-cli.service <<EOF
+sudo touch /etc/systemd/system/agent-cli.service
+sudo echo >/etc/systemd/system/agent-cli.service <<EOF
 [Unit]
 Description=Agent Cli Service for .NET 8 Console Application
 After=network.target
