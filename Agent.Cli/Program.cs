@@ -1,6 +1,5 @@
 ﻿
 using Agent.ConsoleApp.Client;
-using Agent.ConsoleApp.Model;
 using DotEnv.Core;
 using Microsoft.Extensions.Logging;
 using System.Text;
@@ -47,8 +46,9 @@ namespace Agent.Cli
                 "AWS_ACCESS_KEY_ID",
                 "AWS_SECRET_ACCESS_KEY",
                 "AWS_DEFAULT_REGION",
-                "FEISHU_SECRET_ID",
-                "FEISHU_SECRET_KEY",
+                "FEISHU_BITTABLE_ID",
+                "FEISHU_BITTABLE_TABLE_ID",
+                "FEISHU_BITTABLE_TABLE_VIEW_ID",
                 "FEISHU_APP_ID",
                 "FEISHU_APP_SECRET",
                 "IPINFO_TOKEN",
@@ -70,24 +70,28 @@ namespace Agent.Cli
                 {
                     // 获取服务信息
                     Console.WriteLine("获取本机信息");
-                    var status = new ServerStatus();
+                    var serverClient = new ServerClient();
                     string? ipinfotoken = Environment.GetEnvironmentVariable("IPINFO_TOKEN") ?? "";
-                    await status.GetLocalInfo(ipinfotoken);
-                    Console.WriteLine(status.ToJson());
+                    await serverClient.GetLocalInfo(ipinfotoken);
+                    Console.WriteLine(serverClient.ToJson());
 
                     // 上传飞书
                     Console.WriteLine("上传数据");
                     var feishuclient = new FeishuClient();
                     string id = Environment.GetEnvironmentVariable("FEISHU_APP_ID") ?? "";
                     string key = Environment.GetEnvironmentVariable("FEISHU_APP_SECRET") ?? "";
-                    string token = await feishuclient.GetFeishuTokenAsync(id, key);
-                    await feishuclient.UploadFeishuServerStatus(status, token);
+                    string token = await feishuclient.GetFeishuTokenAsync(id, key) ?? "";
+                    string bitId = Environment.GetEnvironmentVariable("FEISHU_BITTABLE_ID") ?? "";
+                    string bitTableId = Environment.GetEnvironmentVariable("FEISHU_BITTABLE_TABLE_ID") ?? "";
+                    string bitTableViewId = Environment.GetEnvironmentVariable("FEISHU_BITTABLE_TABLE_VIEW_ID") ?? "";
+                    await feishuclient.UploadFeishuServerStatus(serverClient.Domain ?? "", serverClient.IPAddress ?? "", 
+                        serverClient.ToJson(), token, bitId, bitTableId, bitTableViewId);
 
                     // 更新域名
                     Console.WriteLine("上传域名");
                     var cli53 = new Cli53Client();
                     string domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "";
-                    string address = status.IPAddress ?? "";
+                    string address = serverClient.IPAddress ?? "";
                     string ret = await cli53.UpsetIpByDomainAsync(domain, address);
                     Console.WriteLine(ret);
                 }

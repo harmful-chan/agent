@@ -2,15 +2,16 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 
-namespace Agent.ConsoleApp.Model
+namespace Agent.ConsoleApp.Client
 {
-    [JsonSerializable(typeof(ServerStatus))]
+    [JsonSerializable(typeof(ServerClient))]
     public partial class ServerStatusJsonContext : JsonSerializerContext
     {
     }
 
-    public class ServerStatus
+    public class ServerClient
     {
 
         #region 属性
@@ -53,7 +54,7 @@ namespace Agent.ConsoleApp.Model
 
         public string ToJson()
         {
-            return JsonSerializer.Serialize(this, ServerStatusJsonContext.Default.ServerStatus);
+            return JsonSerializer.Serialize(this, ServerStatusJsonContext.Default.ServerClient);
         }
     }
 }
