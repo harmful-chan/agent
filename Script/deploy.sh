@@ -15,6 +15,8 @@ WORKDIR=/opt/flori/agent
 sudo mkdir -p $WORKDIR
 pushd $WORKDIR
 
+sudo systemctl stop flori-agent
+# 下载可执行文件，并创建软连接
 if [ ! -f "$RELEASES" ]; then
 	echo "[INFO] 下载 $RELEASES "
 	sudo wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/${VERSION}/${RELEASES}"
@@ -55,6 +57,9 @@ EOF
 	sudo chown root:root /etc/systemd/system/flori-agent.service
 	sudo systemctl daemon-reload
 fi
+
+sudo systemctl enable flori-agent
+sudo systemctl start flori-agent
 
 popd
 
