@@ -47,6 +47,7 @@ BINS=(`ls publish | grep -vE ".pdb|.dbg"`)
 if [[ -d "./publish" && ! ${#BINS} -eq 0 ]]; then
     ./gh release create $VERSION  --title "Version $VERSION" --notes "Initial release with executable"
     ./gh release upload  $VERSION --clobber  "${BINS[@]}"  
+    echo 上传完成
 fi
 
 
