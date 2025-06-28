@@ -13,7 +13,7 @@ RELEASES=agent-cli-${VERSION}-linux-x64
 WORKDIR=/opt/flori/agent
 
 
-function download(){
+function download() {
 	# 下载可执行文件，并创建软连接
 	if [ ! -f "$RELEASES" ]; then
 		echo "[INFO] 下载 $RELEASES "
@@ -24,7 +24,7 @@ function download(){
 }
 
 
-function create_service(){
+function create_service() {
 	if [ ! -f /etc/systemd/system/flori-agent.service ]; then
 		# 写入服务进程
 		echo "[INFO] 创建 /etc/systemd/system/flori-agent.service"
