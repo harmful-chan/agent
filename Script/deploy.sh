@@ -21,6 +21,7 @@ function download() {
 		sudo chmod a+x $RELEASES
 		sudo chown root:root $RELEASES
 	fi
+	echo "[INFO] 下载完成"
 }
 
 
