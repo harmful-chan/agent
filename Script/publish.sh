@@ -24,6 +24,7 @@ else
     port=""
 fi
 
+# 编译文件
 mkdir -p publish
 git clone https://github.com/harmful-chan/agent --single-branch $VERSION
 ./sshpass.exe -p ${password} ssh ${username}@${hostport} "mkdir -p $WORKDIR"
@@ -39,8 +40,19 @@ rm -rf $VERSION
 ./sshpass.exe -p ${password} ssh ${username}@${hostport} "pushd $WORKDIR/$VERSION && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${VERSION}-linux-x64 && popd"
 ./sshpass.exe -p ${password} scp -r ${username}@${hostport}:$WORKDIR/$VERSION/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* publish
 ./sshpass.exe -p ${password} ssh ${username}@${hostport} "rm -rf $WORKDIR/$VERSION"
-
 echo 编译完成
+# 上传文件
+
+BINS=(`ls publish | grep -vE ".pdb|.dbg"`)
+if [[ -d "./publish" && ! ${#BINS} -eq 0 ]]; then
+    ./gh release create $VERSION  --title "Version $VERSION" --notes "Initial release with executable"
+    ./gh release upload  $VERSION --clobber  "${BINS[@]}"  
+fi
+
+
+
+ 
+
 
 
 
