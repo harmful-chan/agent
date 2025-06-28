@@ -21,13 +21,13 @@ function download() {
 		sudo chmod a+x ${RELEASES}
 		sudo chown root:root ${RELEASES}
 	fi
-	echo "[INFO] 下载完成"
 }
 
 
 function create_service() {
 	if [ ! -f /etc/systemd/system/flori-agent.service ]; then
 		# 写入服务进程
+
 		echo "[INFO] 创建 /etc/systemd/system/flori-agent.service"
 		sudo tee flori-agent.service > /dev/null<<EOF
 [Unit]
@@ -62,10 +62,18 @@ EOF
 
 sudo mkdir -p $WORKDIR
 pushd $WORKDIR
-sudo systemctl stop flori-agent
+if [ -f /etc/systemd/system/flori-agent.service ]; then
+	sudo systemctl stop flori-agent
+fi
+
+
 download
-sudo ln -sf ${PWD}/${RELEASES} ${PWD}/flori-agent
+
 create_service
+if [ -f ${PWD}/${RELEASES} ]; then
+	sudo ln -sf ${PWD}/${RELEASES} ${PWD}/flori-agent
+fi
+
 sudo systemctl start flori-agent
 
 popd
