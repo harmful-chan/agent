@@ -56,6 +56,7 @@ EOF
 	sudo systemctl daemon-reload
 fi
 
+popd
 
 
 
