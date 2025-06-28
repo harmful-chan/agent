@@ -17,7 +17,7 @@ pushd $WORKDIR
 
 if [ ! -f "$RELEASES" ]; then
 	echo "[INFO] 下载 $RELEASES "
-	wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/${VERSION}/${RELEASES}"
+	sudo wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/${VERSION}/${RELEASES}"
 	sudo chmod a+x $RELEASES
 	sudo chown root:root $RELEASES
 	sudo ln -s $PWD/$RELEASES $PWD/flori-agent
