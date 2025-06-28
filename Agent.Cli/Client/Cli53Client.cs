@@ -14,6 +14,10 @@ namespace Agent.ConsoleApp.Client
 {
     public class Cli53Client
     {
+        // Unix 系统调用
+        [DllImport("libc", SetLastError = true)]
+        private static extern int chmod(string pathname, int mode);
+
         public async Task<string> UpsetIpByDomainAsync(string domain, string ip)
         {
             string main = "153246.com";
@@ -84,6 +88,14 @@ namespace Agent.ConsoleApp.Client
 
                     using FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write);
                     stream.CopyTo(fileStream);
+                    // 在 Unix 系统上设置可执行权限
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+                        RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        Console.WriteLine("Cli53Client 设置权限 755");
+                        chmod(fileName, Convert.ToInt32("755", 8));
+                    }
+
                     Console.WriteLine($"Cli53Client Create {fileName}");
                 }
 
