@@ -55,7 +55,7 @@ function upload(){
     done
     if [[ -d "./publish" && ! ${#BINS} -eq 0 ]]; then
         echo 上传文件
-        ./gh release create $VERSION  --title "Version $VERSION" --notes "Initial release with executable"
+        ./gh release create $VERSION  --title "$VERSION" --notes "Initial release with executable"
         ./gh release upload  $VERSION --clobber $REL  
         echo 上传完成
     fi
