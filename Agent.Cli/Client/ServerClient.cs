@@ -19,8 +19,6 @@ namespace Agent.ConsoleApp.Client
         public string? Domain { get; set; }
         [JsonPropertyName("IP地址")]
         public string? IPAddress { get; set; }
-        [JsonPropertyName("状态")]
-        public string? Status { get; set; }
         [JsonPropertyName("区域")]
         public string? Region { get; set; }
         [JsonPropertyName("系统")]
@@ -47,7 +45,6 @@ namespace Agent.ConsoleApp.Client
             Region = $"{json?["country"]}/{json?["region"]}/{json?["city"]}";
             BootTime = DateTime.Now.AddMilliseconds(-Environment.TickCount).ToString("yyyy-MM-dd HH:mm:ss");
             Domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "unknown";
-            Status = !string.IsNullOrWhiteSpace(IPAddress) ? "在线" : "unknown";
             OS = RuntimeInformation.OSDescription;
             ReportTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         }

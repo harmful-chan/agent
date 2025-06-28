@@ -39,7 +39,27 @@ bash publish.sh v1.0.0-alpha.1 hans:123456@192.168.2.248
 ```bash
  bash <(curl -Ls https://raw.githubusercontent.com/harmful-chan/agent/refs/heads/develop/Script/deploy.sh) v1.0.0-alpha.1
 ```
-然后，在`/opt/agent-cli/.env`中设置必要的环境变量</br>
+然后，在`/opt/flori/agent/.env`中设置必要的环境变量</br>
+```
+# .env
+# v1.0.0
+AWS_ACCESS_KEY_ID= # AWS Access Key ID
+AWS_SECRET_ACCESS_KEY= # AWS Secret Access Key
+AWS_DEFAULT_REGION=ap-east-1
+
+# 应用ID SECRET
+FEISHU_APP_ID= 
+FEISHU_APP_SECRET=
+# 飞书 多维表格ID, 表格ID, 表格视图ID
+FEISHU_BITTABLE_ID=
+FEISHU_BITTABLE_TABLE_ID=
+FEISHU_BITTABLE_TABLE_VIEW_ID=
+
+# IPINFO TOKEN 用来获取 IP地址信息
+IPINFO_TOKEN=
+# 设定的域名
+DEV_DOMAIN=test.bn.fc.fb.dev.153246.com
+```
 
 以下是常用命令
 ```bash
