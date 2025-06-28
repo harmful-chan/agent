@@ -62,7 +62,7 @@ namespace Agent.ConsoleApp.Client
 
                 
 
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
                     name = "cli53-linux-amd64";
@@ -72,11 +72,12 @@ namespace Agent.ConsoleApp.Client
                     name = "cli53-windows-amd64.exe";
                 }
                 string tempDir = AppDomain.CurrentDomain.BaseDirectory;
-                resName = assembly.GetName().Name?.ToString() + ".Resources." + name;
+                resName = "Agent.Cli.Resources." + name;
                 fileName = Path.Combine(tempDir, name);
             
                 if (!File.Exists(fileName))
                 {
+                    Assembly assembly = Assembly.GetExecutingAssembly();
                     using Stream? stream = assembly.GetManifestResourceStream(resName);
                     if (stream == null)
                         throw new InvalidOperationException($"无法找到资源: {resName}");
