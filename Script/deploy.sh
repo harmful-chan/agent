@@ -22,7 +22,7 @@ if [ ! -f "$RELEASES" ]; then
 	sudo wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/${VERSION}/${RELEASES}"
 	sudo chmod a+x $RELEASES
 	sudo chown root:root $RELEASES
-	sudo ln -s $PWD/$RELEASES $PWD/flori-agent
+	sudo ln -sf $PWD/$RELEASES $PWD/flori-agent
 fi
 
 
@@ -56,9 +56,10 @@ EOF
 	sudo mv flori-agent.service /etc/systemd/system/flori-agent.service
 	sudo chown root:root /etc/systemd/system/flori-agent.service
 	sudo systemctl daemon-reload
+	sudo systemctl enable flori-agent
 fi
 
-sudo systemctl enable flori-agent
+
 sudo systemctl start flori-agent
 
 popd
