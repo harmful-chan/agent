@@ -25,9 +25,11 @@ if [ ! -f "/opt/agent-cli/$RELEASES" ]; then
 	sudo ln -s /opt/agent-cli/$RELEASES /opt/agent-cli/agent-cli
 fi
 
-echo "[INFO] 创建 /etc/systemd/system/agent-cli.service"
+
+if [ ! -f /etc/systemd/system/agent-cli.service ]; then
 # 写入服务进程
-cat >agent-cli.service <<EOF
+	echo "[INFO] 创建 /etc/systemd/system/agent-cli.service"
+	cat >agent-cli.service <<EOF
 [Unit]
 Description=Agent Cli Service for .NET 8 Console Application
 After=network.target
@@ -55,9 +57,14 @@ Environment=DOTNET_ROOT=/usr/share/dotnet
 [Install]
 WantedBy=multi-user.target
 EOF
+	sudo mv agent-cli.service /etc/systemd/system/agent-cli.service
+	sudo chown root:root /etc/systemd/system/agent-cli.service
+	sudo systemctl daemon-reload
 
-sudo mv agent-cli.service /etc/systemd/system/agent-cli.service
-sudo chown root:root /etc/systemd/system/agent-cli.service
-sudo systemctl daemon-reload
+
+fi
+
+
+
 
 

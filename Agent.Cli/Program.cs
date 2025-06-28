@@ -31,11 +31,11 @@ namespace Agent.Cli
                 builder => builder.AddSimpleConsole(options =>
                 {
 
-                    options.IncludeScopes = false;
+                    //options.IncludeScopes = false;
                     options.SingleLine = true;
-                    options.TimestampFormat = "yyyy-MM-dd HH:mm:ss ";
+                    //options.TimestampFormat = "yyyy-MM-dd HH:mm:ss ";
                 }));
-            _logger = factory.CreateLogger("log");
+            _logger = factory.CreateLogger("");
 
             Console.SetOut(new RunOutput());
             #endregion
@@ -69,12 +69,14 @@ namespace Agent.Cli
                 try
                 {
                     // 获取服务信息
+                    Console.WriteLine("获取本机信息");
                     var status = new ServerStatus();
                     string? ipinfotoken = Environment.GetEnvironmentVariable("IPINFO_TOKEN") ?? "";
                     await status.GetLocalInfo(ipinfotoken);
                     Console.WriteLine(status.ToJson());
 
                     // 上传飞书
+                    Console.WriteLine("上传数据");
                     var feishuclient = new FeishuClient();
                     string id = Environment.GetEnvironmentVariable("FEISHU_APP_ID") ?? "";
                     string key = Environment.GetEnvironmentVariable("FEISHU_APP_SECRET") ?? "";
@@ -82,6 +84,7 @@ namespace Agent.Cli
                     await feishuclient.UploadFeishuServerStatus(status, token);
 
                     // 更新域名
+                    Console.WriteLine("更新域名");
                     var cli53 = new Cli53Client();
                     string domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "";
                     string address = status.IPAddress ?? "";
@@ -95,6 +98,7 @@ namespace Agent.Cli
                 }
                 finally
                 {
+                    Console.WriteLine("wait 30s");
                     await Task.Delay(30000);
                 }
 

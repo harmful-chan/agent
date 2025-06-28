@@ -33,8 +33,8 @@ namespace Agent.ConsoleApp.Client
         public async Task UploadFeishuServerStatus(ServerStatus status, string token)
         {
             var client = new RestClient("https://open.feishu.cn");
+            
             // 查询记录接口
-            Console.WriteLine("查询记录");
             var searchRequest = new RestRequest("/open-apis/bitable/v1/apps/Y51VbNUf3askQ2sDdm9chN8JnAc/tables/tblWxQzjloN1vU06/records/search", Method.Post);
             searchRequest.AddHeader("Authorization", $"Bearer {token}");
             searchRequest.AddHeader("Content-Type", "application/json");
@@ -50,21 +50,20 @@ namespace Agent.ConsoleApp.Client
             searchRequest.AddParameter("application/json", searchBody, ParameterType.RequestBody);
             var searchResponse = await client.ExecuteAsync(searchRequest);
             var searchJson = searchResponse.Content != null ? JsonNode.Parse(searchResponse.Content) : "{}";
-            ;
 
-            // 更新或创建记录
+            // 更新或创建记录  
             int total = int.Parse(searchJson?["data"]?["total"]?.ToString() ?? "0");
-            Console.WriteLine($"total {total}");
+            Console.WriteLine($"FeishuClient {status.Domain} 数量 {total}");
             RestRequest? req = null;
             if (total > 0)
             {
-                Console.WriteLine($"更新记录 {status.Domain} {status.IPAddress}");
+                Console.WriteLine($"FeishuClient Update {status.Domain} {status.IPAddress}");
                 var recordId = searchJson?["data"]?["items"]?[0]?["record_id"]?.ToString();
                 req = new RestRequest($"/open-apis/bitable/v1/apps/Y51VbNUf3askQ2sDdm9chN8JnAc/tables/tblWxQzjloN1vU06/records/{recordId}", Method.Put);
             }
             else
             {
-                Console.WriteLine($"更新记录 {status.Domain} {status.IPAddress}");
+                Console.WriteLine($"FeishuClient Add {status.Domain} {status.IPAddress}");
                 req = new RestRequest("/open-apis/bitable/v1/apps/Y51VbNUf3askQ2sDdm9chN8JnAc/tables/tblWxQzjloN1vU06/records", Method.Post);
             }
             req.AddHeader("Authorization", $"Bearer {token}");

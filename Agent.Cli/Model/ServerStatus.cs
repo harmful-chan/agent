@@ -33,7 +33,6 @@ namespace Agent.ConsoleApp.Model
 
         public async Task GetLocalInfo(string ipinfotoken)
         {
-            Console.WriteLine("获取本机IP信息...");
             string uri = $"https://ipinfo.io/json?token="+ ipinfotoken;
             Console.WriteLine(uri);
             HttpClientHandler handler = new HttpClientHandler();
@@ -41,7 +40,8 @@ namespace Agent.ConsoleApp.Model
             var res = await client.GetAsync(uri);
             var str = await res.Content.ReadAsStringAsync();
             var json = JsonNode.Parse(str);
-            Console.WriteLine(str);
+            Console.WriteLine(str.Replace("\n", "").Replace(" ", ""));
+
             IPAddress = json?["ip"]?.ToString() ?? "unknown";
             Region = $"{json?["country"]}/{json?["region"]}/{json?["city"]}";
             BootTime = DateTime.Now.AddMilliseconds(-Environment.TickCount).ToString("yyyy-MM-dd HH:mm:ss");

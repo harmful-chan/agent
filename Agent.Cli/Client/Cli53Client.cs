@@ -16,72 +16,74 @@ namespace Agent.ConsoleApp.Client
     {
         public async Task<string> UpsetIpByDomainAsync(string domain, string ip)
         {
-            if(domain == null || ip == null)
+            string main = "153246.com";
+
+            if (domain == null || ip == null)
             {
                 throw new ArgumentNullException("域名或IP地址不能为空");
             }
 
-            string main = "153246.com";
             if (!domain.EndsWith(main))
             {
-                return string.Empty; // 只处理 153246.com 域名
+                throw new ArgumentNullException("域名不为 153246.com");
             }
-            string rawRecord = await RunAsync($"export {main}");
-            var zone = DnsZoneFile.Parse(rawRecord);
-            var record = zone.Records.Where(r => r.Name == domain && r.Type == ResourceRecordType.A).FirstOrDefault();
-            
-            string sub = domain.Replace($".{main}", "");
-            if (record == null) 
-            {
-                var ret = await RunAsync($"rrcreate {main} \"{sub} 60 A {ip}\"");
-                return ret;
 
+            (string output, string error) = await RunAsync($"export {main}");
+            var zone = DnsZoneFile.Parse(output);
+            var record = zone.Records.Where(r => r.Name == domain && r.Type == ResourceRecordType.A).FirstOrDefault();
+
+            string sub = domain.Replace($".{main}", "");
+            if (record == null)
+            {
+                Console.WriteLine($"Cli53Client Add {domain} 60 A {ip}");
+                (output, error) = await RunAsync($"rrcreate {main} \"{sub} 60 A {ip}\"");
+                return output;
             }
             else
             {
                 var aRecord = record as AResourceRecord; // 确保是 A 记录    
                 if (aRecord.Name.Equals(domain) && aRecord.Address.ToString().Equals(ip))
                 {
-                    return $"{aRecord.Name} {aRecord.Address} 没变化";
+                    return $"Cli53Client {aRecord.Name} {aRecord.Address} 没变化";
                 }
 
-                var ret = await RunAsync($"rrcreate --replace {main} \"{sub} 60 A {ip}\"");
-                return ret;
+                Console.WriteLine($"Cli53Client Update {domain} 60 A {ip}");
+                (output, error) = await RunAsync($"rrcreate --replace {main} \"{sub} 60 A {ip}\"");
+                return output;
             }
         }
 
-        private static Task<string> RunAsync(string arg)
+        private static Task<(string, string)> RunAsync(string arg)
         {
             return Task.Run(() => {
 
 
-                string name = string.Empty;
+                string resName, fileName, name = string.Empty;
 
-                // 从资源中提取程序到临时目录
-                string tempDir = Path.Combine(Path.GetTempPath(), "EmbeddedTool");
-                Directory.CreateDirectory(tempDir);
-
-
+                
 
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    name = assembly.GetName().Name?.ToString() + ".Resources.cli53-linux-amd64";
+                    name = "cli53-linux-amd64";
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    name = assembly.GetName().Name?.ToString() + ".Resources.cli53-windows-amd64.exe";
+                    name = "cli53-windows-amd64.exe";
                 }
-
-                string bin = Path.Combine(tempDir, name);
-                if (!File.Exists(bin))
+                string tempDir = AppDomain.CurrentDomain.BaseDirectory;
+                resName = assembly.GetName().Name?.ToString() + ".Resources." + name;
+                fileName = Path.Combine(tempDir, name);
+            
+                if (!File.Exists(fileName))
                 {
-                    using Stream? stream = assembly.GetManifestResourceStream(name);
+                    using Stream? stream = assembly.GetManifestResourceStream(resName);
                     if (stream == null)
-                        throw new InvalidOperationException($"无法找到资源: {name}");
+                        throw new InvalidOperationException($"无法找到资源: {resName}");
 
-                    using FileStream fileStream = new FileStream(bin, FileMode.Create, FileAccess.Write);
+                    using FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write);
                     stream.CopyTo(fileStream);
+                    Console.WriteLine($"Cli53Client Create {fileName}");
                 }
 
 
@@ -89,7 +91,7 @@ namespace Agent.ConsoleApp.Client
                 // 设置进程信息
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
-                    FileName = bin,
+                    FileName = fileName,
                     Arguments = arg,
                     UseShellExecute = false,
                     CreateNoWindow = true,
@@ -99,7 +101,7 @@ namespace Agent.ConsoleApp.Client
                 };
 
                 // 启动进程
-                Console.WriteLine($"执行命令: {startInfo.FileName} {startInfo.Arguments}");
+                Console.WriteLine($"{startInfo.FileName} {startInfo.Arguments}");
                 using Process process = new Process { StartInfo = startInfo };
                 process.Start();
 
@@ -108,10 +110,8 @@ namespace Agent.ConsoleApp.Client
                 string error = process.StandardError.ReadToEnd();
 
                 process.WaitForExit();
-                Console.WriteLine($"标准输出:{output} 标准错误:{error}");
-
-                return !string.IsNullOrWhiteSpace(output) ? output : error;
-
+                
+                return (output, error);
             });
         }
     }
