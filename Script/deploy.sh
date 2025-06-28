@@ -27,8 +27,7 @@ fi
 if [ ! -f /etc/systemd/system/flori-agent.service ]; then
 	# 写入服务进程
 	echo "[INFO] 创建 /etc/systemd/system/flori-agent.service"
-	touch flori-agent.service
-	echo >flori-agent.service <<EOF
+	sudo tee flori-agent.service > /dev/null<<EOF
 [Unit]
 Description=Agent Cli Service for .NET 8 Console Application
 After=network.target
