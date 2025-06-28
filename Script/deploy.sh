@@ -15,11 +15,11 @@ WORKDIR=/opt/flori/agent
 
 function download() {
 	# 下载可执行文件，并创建软连接
-	if [ ! -f "$RELEASES" ]; then
+	if [ ! -f "${RELEASES}" ]; then
 		echo "[INFO] 下载 $RELEASES "
 		sudo wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/${VERSION}/${RELEASES}"
-		sudo chmod a+x $RELEASES
-		sudo chown root:root $RELEASES
+		sudo chmod a+x ${RELEASES}
+		sudo chown root:root ${RELEASES}
 	fi
 	echo "[INFO] 下载完成"
 }
@@ -64,7 +64,7 @@ sudo mkdir -p $WORKDIR
 pushd $WORKDIR
 sudo systemctl stop flori-agent
 download
-sudo ln -sf $PWD/$RELEASES $PWD/flori-agent
+sudo ln -sf ${PWD}/${RELEASES} ${PWD}/flori-agent
 create_service
 sudo systemctl start flori-agent
 
