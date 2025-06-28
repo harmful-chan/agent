@@ -84,17 +84,17 @@ namespace Agent.Cli
                     await feishuclient.UploadFeishuServerStatus(status, token);
 
                     // 更新域名
-                    Console.WriteLine("更新域名");
+                    Console.WriteLine("上传域名");
                     var cli53 = new Cli53Client();
                     string domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "";
                     string address = status.IPAddress ?? "";
                     string ret = await cli53.UpsetIpByDomainAsync(domain, address);
                     Console.WriteLine(ret);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
-                    throw;
+                    Console.WriteLine(ex.Message);
                 }
                 finally
                 {
