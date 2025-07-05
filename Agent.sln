@@ -34,6 +34,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "agent", "agent", "{27C38E71-5DF6-4A65-8CEA-03CF9E04F032}"
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
+		CHANGELOG.md = CHANGELOG.md
 		README.md = README.md
 	EndProjectSection
 EndProject

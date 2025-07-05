@@ -40,7 +40,7 @@ namespace Agent.ConsoleApp.Client
         }
 
         // 上传到飞书多维表格（使用 RestClient/RestRequest 改写）
-        public async Task UploadFeishuServerStatus(string domain, string ipv4, string statusJson, string token, string bitId, string tableId, string viewId)
+        public async Task UploadServerStatusById(string id, string statusJson, string token, string bitId, string tableId, string viewId)
         {
             var client = new RestClient("https://open.feishu.cn");
             
@@ -50,13 +50,13 @@ namespace Agent.ConsoleApp.Client
             searchRequest.AddHeader("Content-Type", "application/json");
             var searchBody = "{" +
                 "\"automatic_fields\":false," +
-                "\"field_names\":[\"域名ID\"]," +
+                "\"field_names\":[\"ID\"]," +
                 "\"filter\":{" +
                     "\"conditions\":[" +
-                        "{\"field_name\":\"域名ID\",\"operator\":\"is\",\"value\":[\"" + domain + "\"]}" +
+                        "{\"field_name\":\"ID\",\"operator\":\"is\",\"value\":[\"" + id + "\"]}" +
                     "]," +
                     "\"conjunction\":\"and\"" +
-                "},\"sort\":[{\"desc\":true,\"field_name\":\"域名ID\"}],\"view_id\":\""+viewId+"\"}";
+                "},\"sort\":[{\"desc\":true,\"field_name\":\"ID\"}],\"view_id\":\""+viewId+"\"}";
             searchRequest.AddParameter("application/json", searchBody, ParameterType.RequestBody);
             var searchResponse = await client.ExecuteAsync(searchRequest);
             AssertJson(searchResponse.Content);
@@ -66,17 +66,17 @@ namespace Agent.ConsoleApp.Client
 
             // 更新或创建记录  
             int total = int.Parse(searchJson?["data"]?["total"]?.ToString() ?? "0");
-            Console.WriteLine($"FeishuClient {domain} 数量 {total}");
+            Console.WriteLine($"FeishuClient {id} 数量 {total}");
             RestRequest? req = null;
             if (total > 0)
             {
-                Console.WriteLine($"FeishuClient Update {domain} {ipv4}");
+                Console.WriteLine($"FeishuClient Update {id}");
                 var recordId = searchJson?["data"]?["items"]?[0]?["record_id"]?.ToString();
                 req = new RestRequest($"/open-apis/bitable/v1/apps/{bitId}/tables/{tableId}/records/{recordId}", Method.Put);
             }
             else
             {
-                Console.WriteLine($"FeishuClient Add {domain} {ipv4}");
+                Console.WriteLine($"FeishuClient Add {id}");
                 req = new RestRequest($"/open-apis/bitable/v1/apps/{bitId}/tables/{tableId}/records", Method.Post);
             }
             req.AddHeader("Authorization", $"Bearer {token}");

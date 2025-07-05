@@ -7,22 +7,34 @@ if [ $# -eq 0 ]; then
     echo "错误: 请提供版本名称作为参数，例如: v1.0.0-alpha.1"
     exit 1
 fi
-VERSION=$1
-REMOTE=$2
-userpass="${2%%@*}"
-hostport="${2##*@}"
-username="${userpass%%:*}"
-password="${userpass#*:}"
 
-WORKDIR=/home/${username}/.flori/build/
-# 检查主机部分是否包含端口
-if [[ "$hostport" == *:* ]]; then
-    hostname="${hostport%:*}"
-    port="${hostport##*:}"
-else
-    hostname="$hostport"
-    port=""
-fi
+
+
+function setenv() {
+    VERSION=$2
+    REMOTE=$3
+    USERPASS="${3%%@*}"
+    HOSTPORT="${3##*@}"
+    USER="${USERPASS%%:*}"
+    PASS="${USERPASS#*:}"
+
+    WORKDIR=/home/${username}/.flori/build/
+
+    # 检查主机部分是否包含端口
+    if [[ "$HOSTPORT" == *:* ]]; then
+        HOST="${HOSTPORT%:*}"
+        PORT="${HOSTPORT##*:}"
+    else
+        HOST="$HOSTPORT"
+        PORT=""
+    fi
+
+}
+
+function tag() {
+    git tag $VERSION
+}
+
 
 function build(){
     # 编译文件
@@ -61,8 +73,16 @@ function upload(){
     fi
 }
 
-build
-upload  
+# publish.sh build v1.0.0-alpha.1 hans:123456@
+if [ "$1" = "build"  ]; then
+    setenv
+    tag
+    build
+elif [ "$1" = "upload" ]; then
+    setenv
+    upload
+
+fi
 
 
 

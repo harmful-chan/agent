@@ -84,16 +84,15 @@ namespace Agent.Cli
                     string bitId = Environment.GetEnvironmentVariable("FEISHU_BITTABLE_ID") ?? "";
                     string bitTableId = Environment.GetEnvironmentVariable("FEISHU_BITTABLE_TABLE_ID") ?? "";
                     string bitTableViewId = Environment.GetEnvironmentVariable("FEISHU_BITTABLE_TABLE_VIEW_ID") ?? "";
-                    await feishuclient.UploadFeishuServerStatus(serverClient.Domain ?? "", serverClient.IPAddress ?? "", 
-                        serverClient.ToJson(), token, bitId, bitTableId, bitTableViewId);
+                    await feishuclient.UploadServerStatusById(serverClient.IPAddress ?? "", serverClient.ToJson(), token, bitId, bitTableId, bitTableViewId);
 
                     // 更新域名
-                    Console.WriteLine("上传域名");
-                    var cli53 = new Cli53Client();
-                    string domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "";
-                    string address = serverClient.IPAddress ?? "";
-                    string ret = await cli53.UpsetIpByDomainAsync(domain, address);
-                    Console.WriteLine(ret);
+                    //Console.WriteLine("上传域名");
+                    //var cli53 = new Cli53Client();
+                    //string domain = Environment.GetEnvironmentVariable("DEV_DOMAIN") ?? "";
+                    //string address = serverClient.IPAddress ?? "";
+                    //string ret = await cli53.UpsetIpByDomainAsync(domain, address);
+                    //Console.WriteLine(ret);
                 }
                 catch (Exception ex)
                 {
