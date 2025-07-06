@@ -42,8 +42,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy $(SolutionDir)script\.env $(TargetDir) /e /i /y" />
-  </Target>
-
 </Project>

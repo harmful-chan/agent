@@ -30,8 +30,8 @@ function setenv() {
         LATEST="${VERSION}-alpha.1"
         NEW="${VERSION}-alpha.1"
     else
-        INDEX=$((${#LATEST[@]}-1))
-        LATEST=${LATEST[INDEX]}
+        INDEX=$((${#ARR[@]}-1))
+        LATEST=${ARR[INDEX]}
         EXTRA=${LATEST%.*}
         NUM=$(echo "$LATEST" | grep -oE '[0-9]+$')
         NEW="${EXTRA}.$((NUM+1))"
