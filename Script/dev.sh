@@ -50,13 +50,13 @@ function build() {
     mkdir -p build
     git tag $NEW
     git archive --format=tar.gz --prefix=${NEW}/ --output=build/${NEW}.tar.gz ${NEW}
-
+    
     # 拷贝代码
     # git clone https://github.com/harmful-chan/agent --single-branch $VERSION
     $DIR/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "mkdir -p $WORKDIR"
     $DIR/sshpass.exe -p ${PASS} scp -r build/${NEW}.tar.gz ${USER}@${HOSTPORT}:$WORKDIR
     # 
-
+    
     # 解压并编译代码 windows
     pushd build
     tar -xvf ${NEW}.tar.gz
@@ -72,7 +72,7 @@ function build() {
     $DIR/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "rm -rf $WORKDIR/${NEW}*"
     echo 编译完成
     echo 拷贝 .env
-    cp $DIR/.env build/.env
+    cp $DIR/.env ./build/.env
 }
 
 # 上传文件
