@@ -21,22 +21,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9FA3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "script", "script", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
+		script\.env = script\.env
 		script\agent.sh = script\agent.sh
 		script\api.md = script\api.md
 		script\apt.txt = script\apt.txt
 		Script\deploy.sh = Script\deploy.sh
-		script\publish.sh = script\publish.sh
+		script\dev.sh = script\dev.sh
 		script\requirements.md = script\requirements.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent.Cli", "Agent.Cli\Agent.Cli.csproj", "{1E7EFC5B-A37D-40A9-A75E-478F35D9168E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "agent", "agent", "{27C38E71-5DF6-4A65-8CEA-03CF9E04F032}"
 	ProjectSection(SolutionItems) = preProject
-		.env = .env
 		CHANGELOG.md = CHANGELOG.md
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A9094A79-6E27-4052-8F6F-E81D1DD96B4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent.Cli", "src\Agent.Cli\Agent.Cli.csproj", "{07360A44-1AF7-40CB-C1DA-6667346426B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,13 +46,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1E7EFC5B-A37D-40A9-A75E-478F35D9168E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E7EFC5B-A37D-40A9-A75E-478F35D9168E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E7EFC5B-A37D-40A9-A75E-478F35D9168E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E7EFC5B-A37D-40A9-A75E-478F35D9168E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07360A44-1AF7-40CB-C1DA-6667346426B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07360A44-1AF7-40CB-C1DA-6667346426B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07360A44-1AF7-40CB-C1DA-6667346426B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07360A44-1AF7-40CB-C1DA-6667346426B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07360A44-1AF7-40CB-C1DA-6667346426B3} = {A9094A79-6E27-4052-8F6F-E81D1DD96B4A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E671981C-F6D1-46E1-8073-161FBCA06345}
