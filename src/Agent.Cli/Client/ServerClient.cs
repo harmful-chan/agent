@@ -16,6 +16,8 @@ namespace Agent.ConsoleApp.Client
 
         #region 属性
         [JsonPropertyName("ID")]
+        public string? Id { get; set; }
+        [JsonPropertyName("域名")]
         public string? Domain { get; set; }
         [JsonPropertyName("IP地址")]
         public string? IPAddress { get; set; }

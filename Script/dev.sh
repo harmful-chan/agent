@@ -46,7 +46,7 @@ function setenv() {
 function build() {
 
 
-    # 编译文件
+    # 打包文件
     mkdir -p build
     git tag $NEW
     git archive --format=tar.gz --prefix=${NEW}/ --output=build/${NEW}.tar.gz ${NEW}
@@ -70,7 +70,9 @@ function build() {
     $DIR/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "pushd $WORKDIR && tar -xvf ${NEW}.tar.gz &&  pushd $NEW && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${NEW}-linux-x64 && popd"
     $DIR/sshpass.exe -p ${PASS} scp -r ${USER}@${HOSTPORT}:$WORKDIR/$NEW/src/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* .
     $DIR/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "rm -rf $WORKDIR/${NEW}*"
-    # echo 编译完成
+    echo 编译完成
+    echo 拷贝 .env
+    cp $DIR/.env build/
 }
 
 # 上传文件

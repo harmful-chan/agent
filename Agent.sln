@@ -22,9 +22,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "script", "script", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		script\.env = script\.env
-		script\agent.sh = script\agent.sh
 		script\api.md = script\api.md
-		script\apt.txt = script\apt.txt
 		Script\deploy.sh = Script\deploy.sh
 		script\dev.sh = script\dev.sh
 		script\requirements.md = script\requirements.md
