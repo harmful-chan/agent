@@ -46,8 +46,8 @@ function build(){
 
     # 拷贝代码
     # git clone https://github.com/harmful-chan/agent --single-branch $VERSION
-    ./sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "mkdir -p $WORKDIR"
-    ./sshpass.exe -p ${PASS} scp -r build/${NEW}.tar.gz ${USER}@${HOSTPORT}:$WORKDIR
+    $(dirname $0)/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "mkdir -p $WORKDIR"
+    $(dirname $0)/sshpass.exe -p ${PASS} scp -r build/${NEW}.tar.gz ${USER}@${HOSTPORT}:$WORKDIR
     # 
 
     # 解压并编译代码 windows
@@ -57,12 +57,12 @@ function build(){
     dotnet publish -r win-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${NEW}-win-x64
     popd
      
-    cp -r $NEW/Agent.Cli/bin/Release/net8.0/win-x64/publish/* .
+    cp -r $NEW/src/Agent.Cli/bin/Release/net8.0/win-x64/publish/* .
     rm -rf $NEW
      
-    ./sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "pushd $WORKDIR && tag -xvf $NEW &&  pushd $NEW && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${NEW}-linux-x64 && popd"
-    ./sshpass.exe -p ${PASS} scp -r ${USER}@${HOSTPORT}:$WORKDIR/$NEW/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* .
-    ./sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "rm -rf $WORKDIR/${NEW}*"
+    $(dirname $0)/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "pushd $WORKDIR && tag -xvf $NEW &&  pushd $NEW && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${NEW}-linux-x64 && popd"
+    $(dirname $0)/sshpass.exe -p ${PASS} scp -r ${USER}@${HOSTPORT}:$WORKDIR/$NEW/src/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* .
+    $(dirname $0)/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "rm -rf $WORKDIR/${NEW}*"
     # echo 编译完成
 }
 
