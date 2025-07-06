@@ -17,7 +17,7 @@ function download() {
 	# 下载可执行文件，并创建软连接
 	if [ ! -f "${RELEASES}" ]; then
 		echo "[INFO] 下载 $RELEASES "
-		sudo wget  "https://git.floribird.com/https://github.com/harmful-chan/agent/releases/download/${VERSION}/${RELEASES}"
+		sudo wget  "https://git.floribird.cn/https://github.com/harmful-chan/agent/releases/download/${VERSION}/${RELEASES}"
 		sudo chmod a+x ${RELEASES}
 		sudo chown root:root ${RELEASES}
 	fi
