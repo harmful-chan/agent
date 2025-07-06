@@ -6,31 +6,37 @@
 - 上报：数据上传到飞书多维表格
 - 域名: 自动更下或添加指定域名的A记录
 
-
-## 发布
-需要发布的版本先打tag，`publish.sh` 脚本根据tag获取代码编译
-```bash
-# git ls-remote --tags
-# git tag -d v1.0.0-alpha.1
-# git push origin :refs/tags/v1.0.0-alpha.1
-
-git tag v1.0.0-alpha.1
-git push origin v1.0.0-alpha.1
-```
-
 ## 编译
 > - linux 使用 ubuntu 22.04 
 > - 安装 .NET 8 SDK https://learn.microsoft.com/zh-cn/dotnet/core/install/linux-ubuntu-install?tabs=dotnet8&pivots=os-linux-ubuntu-2204
 > - 安装 AOT 编译器 https://learn.microsoft.com/zh-cn/dotnet/core/deploying/native-aot/?tabs=linux-ubuntu%2Cnet8
 
-在 windows git bash 中运行以下命令编译，在`publish` 文件夹中自动生成发布文件</br>
-其中`hans:123456@192.168.2.248` 指定linux主机的用户名、密码、IP地址和SSH端口，
+在 windows git bash 中运行以下命令编译，在`build` 文件夹中自动生成发布文件</br>
+在`.env`中指定`DEV_SSH`为`hans:123456@192.168.2.248` 指定linux主机的用户名、密码、IP地址和SSH端口，
+会自动打标签，并编译文件，可以执行文件在`build`中可以找到</br>
+版本名形如`v1.1.0-alpha.1`,`v1.1.0-alpha.2`,`...`
 ```bash
 # 进入 bash 
 # & "C:\Program Files\Git\bin\bash.exe" 
-cd Script
-bash publish.sh v1.0.0-alpha.1 hans:123456@192.168.2.248
+cd agent
+bash script/dev.sh build
 ```
+
+
+## 发布
+运行 `bash script/dev.sh upload`</br>
+会获取当前最新tag,创建release, 并发布可执行文件
+```bash
+# git ls-remote --tags
+# git tag -d v1.0.0-alpha.1
+# git push origin :refs/tags/v1.0.0-alpha.1
+# git tag v1.0.0-alpha.1
+# git push origin v1.0.0-alpha.1
+
+bash script/dev.sh upload
+```
+
+
 
 
 
@@ -57,7 +63,7 @@ FEISHU_BITTABLE_TABLE_VIEW_ID=
 
 # IPINFO TOKEN 用来获取 IP地址信息
 IPINFO_TOKEN=
-# 设定的域名
+# 设定的域名, 可空
 DEV_DOMAIN=test.bn.fc.fb.dev.153246.com
 ```
 

@@ -86,8 +86,8 @@ function upload(){
     done
     if [[ -d "./build" && ! ${#BINS} -eq 0 ]]; then
         echo 上传文件
-        $DIR/gh release create $NEW  --title "$LATEST" --notes "Initial release with executable"
-        $DIR/gh release upload  $NEW --clobber $REL  
+        $DIR/gh release create $LATEST  --title "$LATEST" --notes "Initial release with executable"
+        $DIR/gh release upload  $LATEST --clobber $REL  
         echo 上传完成
     fi
 }
