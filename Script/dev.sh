@@ -28,7 +28,7 @@ function setenv() {
 function build(){
 
     # 最后版本
-    LATEST=($(git tag))
+    LATEST=($(git tag | grep ${VERSION}))
     INDEX=$((${#LATEST[@]}-1))
     LATEST=${LATEST[INDEX]}
     EXTRA=${LATEST%.*}
@@ -40,25 +40,29 @@ function build(){
 
 
     # 编译文件
-    mkdir -p publish
-    git remote get-url build_linux || git remote add build_linux ${USER}@${HOSTPORT}:${WORKDIR} 
+    mkdir -p build
     git tag $NEW
-    git scp build_linux $NEW
+    git archive --format=tar.gz --prefix=${NEW}/ --output=build/${NEW}.tar.gz ${NEW}
 
+    # 拷贝代码
     # git clone https://github.com/harmful-chan/agent --single-branch $VERSION
-    # ./sshpass.exe -p ${password} ssh ${username}@${hostport} "mkdir -p $WORKDIR"
-    # ./sshpass.exe -p ${password} scp -r $VERSION ${username}@${hostport}:$WORKDIR
+    ./sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "mkdir -p $WORKDIR"
+    ./sshpass.exe -p ${PASS} scp -r build/${NEW}.tar.gz ${USER}@${HOSTPORT}:$WORKDIR
     # 
-    # pushd $VERSION
-    # dotnet publish -r win-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${VERSION}-win-x64
-    # popd
-    # 
-    # cp -r $VERSION/Agent.Cli/bin/Release/net8.0/win-x64/publish/* publish
-    # rm -rf $VERSION
-    # 
-    # ./sshpass.exe -p ${password} ssh ${username}@${hostport} "pushd $WORKDIR/$VERSION && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${VERSION}-linux-x64 && popd"
-    # ./sshpass.exe -p ${password} scp -r ${username}@${hostport}:$WORKDIR/$VERSION/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* publish
-    # ./sshpass.exe -p ${password} ssh ${username}@${hostport} "rm -rf $WORKDIR/$VERSION"
+
+    # 解压并编译代码 windows
+    pushd build
+    tar -xvf ${NEW}.tar.gz
+    pushd ${NEW}
+    dotnet publish -r win-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${NEW}-win-x64
+    popd
+     
+    cp -r $NEW/Agent.Cli/bin/Release/net8.0/win-x64/publish/* .
+    rm -rf $NEW
+     
+    ./sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "pushd $WORKDIR && tag -xvf $NEW &&  pushd $NEW && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${NEW}-linux-x64 && popd"
+    ./sshpass.exe -p ${PASS} scp -r ${USER}@${HOSTPORT}:$WORKDIR/$NEW/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* .
+    ./sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "rm -rf $WORKDIR/${NEW}*"
     # echo 编译完成
 }
 
