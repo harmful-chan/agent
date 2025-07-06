@@ -71,8 +71,6 @@ function build() {
     $DIR/sshpass.exe -p ${PASS} scp -r ${USER}@${HOSTPORT}:$WORKDIR/$NEW/src/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* .
     $DIR/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "rm -rf $WORKDIR/${NEW}*"
     echo 编译完成
-    echo 拷贝 .env
-    cp $DIR/.env ./build/.env
 }
 
 # 上传文件
