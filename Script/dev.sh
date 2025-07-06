@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # v1.0.0-alpha.1 hans:123456@192.168.2.248
-set -euo pipefail
+set -e
 
 
 function setenv() {
@@ -41,10 +41,7 @@ function build(){
 
     # 编译文件
     mkdir -p publish
-    git remote get-url build_linux
-    if [ ! $? -eq 0 ]; then
-        git remote add build_linux ${USER}@${HOSTPORT}:${WORKDIR}
-    fi
+    git remote get-url build_linux || git remote add build_linux ${USER}@${HOSTPORT}:${WORKDIR} 
     git tag $NEW
     git scp build_linux $NEW
 
