@@ -35,7 +35,7 @@ function build(){
     INDEX=$((${#LATEST[@]}-1))
     LATEST=${LATEST[INDEX]}
     EXTRA=${LATEST%.*}
-    NUM=$(echo "LATEST" | grep -oE '[0-9]+$')
+    NUM=$(echo "$LATEST" | grep -oE '[0-9]+$')
     NEW="${EXTRA}.$((NUM+1))"
     echo $LATEST  "->" $NEW
     
