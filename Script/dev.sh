@@ -63,7 +63,7 @@ function build(){
     cp -r $NEW/src/Agent.Cli/bin/Release/net8.0/win-x64/publish/* .
     rm -rf $NEW
      
-    $DIR/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "pushd $WORKDIR && tag -xvf $NEW &&  pushd $NEW && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${NEW}-linux-x64 && popd"
+    $DIR/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "pushd $WORKDIR && tar -xvf $NEW &&  pushd $NEW && dotnet publish -r linux-x64 -c Release --self-contained true -p:PublishAot=true -p:AssemblyName=agent-cli-${NEW}-linux-x64 && popd"
     $DIR/sshpass.exe -p ${PASS} scp -r ${USER}@${HOSTPORT}:$WORKDIR/$NEW/src/Agent.Cli/bin/Release/net8.0/linux-x64/publish/* .
     $DIR/sshpass.exe -p ${PASS} ssh ${USER}@${HOSTPORT} "rm -rf $WORKDIR/${NEW}*"
     # echo 编译完成
