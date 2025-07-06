@@ -22,24 +22,28 @@ function setenv() {
         PORT=""
     fi
 
-}   
-
-
-function build(){
-
-
     # 可执行文件目录
     DIR=$(dirname $(readlink -f $0))
     # 最后版本
-    LATEST=($(git tag | grep ${VERSION} | sort -V))
-    INDEX=$((${#LATEST[@]}-1))
-    LATEST=${LATEST[INDEX]}
-    EXTRA=${LATEST%.*}
-    NUM=$(echo "$LATEST" | grep -oE '[0-9]+$')
-    NEW="${EXTRA}.$((NUM+1))"
+    ARR=($(git tag | grep ${VERSION} | sort -V))
+    if [ ${#ARR[@]} -eq 0 ]; then
+        LATEST="${VERSION}-alpha.1"
+        NEW="${VERSION}-alpha.1"
+    else
+        INDEX=$((${#LATEST[@]}-1))
+        LATEST=${LATEST[INDEX]}
+        EXTRA=${LATEST%.*}
+        NUM=$(echo "$LATEST" | grep -oE '[0-9]+$')
+        NEW="${EXTRA}.$((NUM+1))"
+    fi
+
+
     echo $LATEST  "->" $NEW
-    
- 
+
+}   
+
+
+function build() {
 
 
     # 编译文件
@@ -71,17 +75,17 @@ function build(){
 
 # 上传文件
 function upload(){
-    BINS=(`ls publish | grep -vE ".pdb|.dbg" | grep "$VERSION"`)
+    BINS=(`ls build | grep -vE ".pdb|.dbg|.tar.gz" | grep "$LATEST"`)
     echo ${BINS[@]}
     REL=""
     for bin in ${BINS[*]}
     do
-        REL+="publish/$bin "
+        REL+="build/$bin "
     done
-    if [[ -d "./publish" && ! ${#BINS} -eq 0 ]]; then
+    if [[ -d "./build" && ! ${#BINS} -eq 0 ]]; then
         echo 上传文件
-        ./gh release create $VERSION  --title "$VERSION" --notes "Initial release with executable"
-        ./gh release upload  $VERSION --clobber $REL  
+        $DIR/gh release create $NEW  --title "$LATEST" --notes "Initial release with executable"
+        $DIR/gh release upload  $NEW --clobber $REL  
         echo 上传完成
     fi
 }
