@@ -31,7 +31,7 @@ function build(){
     # 可执行文件目录
     DIR=$(dirname $(readlink -f $0))
     # 最后版本
-    LATEST=($(git tag | grep ${VERSION}))
+    LATEST=($(git tag | grep ${VERSION} | sort -V))
     INDEX=$((${#LATEST[@]}-1))
     LATEST=${LATEST[INDEX]}
     EXTRA=${LATEST%.*}
